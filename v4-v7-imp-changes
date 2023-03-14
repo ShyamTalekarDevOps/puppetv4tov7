@@ -1,0 +1,17 @@
+Data:
+
+How you store and lookup data has changed.
+hiera_* functions are deprecated in favour of `lookup()` functions. 
+lookups() should not be used in class params 
+Modules can now have their own independent hierarchy
+Puppet has more Data types and built-in data validation
+
+Ruby:
+Puppet DSL has evolved to support ruby-esq syntax. loops, string transformation, hash and arrays manipulation, and others. Puppet now uses ruby 2.7.
+
+PDK:
+Puppet development toolkit is a toolset to develop and test puppet module.
+
+Facter:
+Facter 4 has been introduced and how you interact with facts has changed. 
+Facts have been abused and is one of the main causes for slow puppet runs. We are introducing strong rules around facts.
