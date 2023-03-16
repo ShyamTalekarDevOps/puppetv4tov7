@@ -10,14 +10,27 @@ class adminconsole {
     default  => absent
   }
 
+  $adminconsole_env_path = $::mc_grid ? {
+    'DEV'    => "puppet:///modules/adminconsole/scripts/DEV",
+    'QA'     => "puppet:///modules/adminconsole/scripts/QA",
+    'LT'     => "puppet:///modules/adminconsole/scripts/LT",
+    default  => absent
+  }
+
+  $mcwebapp_env_path = $::mc_grid ? {
+    'DEV'    => "puppet:///modules/mcwebapp/scripts/DEV",
+    'QA'     => "puppet:///modules/mcwebapp/scripts/QA",
+    'LT'     => "puppet:///modules/mcwebapp/scripts/LT",
+    default  => absent
+  }
+
   if ( $::mc_grid =~ /DEV|QA|LT/) {
 
     file { '/usr/local/tomcat/cfg/adcon-web-ui.json':
       ensure  => $jmx_ldap_ensure,
-      source  => [
-        "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/adcon-web-ui.json",
-        "puppet:///modules/adminconsole/scripts/${::mc_grid}/adcon-web-ui.json"
-      ],
+      source  => ["${adminconsole_env_path}/${::hostname}/adcon-web-ui.json", 
+                  "${adminconsole_env_path}/adcon-web-ui.json"
+                  ],
       owner   => 'mcuser',
       group   => 'mcuser',
       mode    => '0644',
@@ -41,8 +54,8 @@ class adminconsole {
   file { '/usr/local/mimecast/log4j.xml':
     ensure  => present,
     source  => [
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/log4j.xml",
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/log4j.xml",
+      "${adminconsole_env_path}/${::hostname}/log4j.xml",
+      "${adminconsole_env_path}/log4j.xml",
       'puppet:///modules/adminconsole/scripts/log4j.xml'
     ],
     owner   => 'mcuser',
@@ -54,9 +67,9 @@ class adminconsole {
   file { '/usr/local/tomcat/bin/catalina.sh':
     ensure  => present,
     source  => [
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/catalina.sh",
+      "${adminconsole_env_path}/${::hostname}/catalina.sh",
       "puppet:///modules/adminconsole/scripts/${::mc_servertype}/catalina.sh",
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/catalina.sh",
+      "${adminconsole_env_path}/catalina.sh",
       'puppet:///modules/adminconsole/scripts/catalina.sh',
     ],
     owner   => 'mcuser',
@@ -169,8 +182,8 @@ class adminconsole {
   file { '/usr/local/tomcat/cfg/jmx_ldap.config':
     ensure  => $jmx_ldap_ensure,
     source  => [
-      "puppet:///modules/mcwebapp/scripts/${::mc_grid}/${::hostname}/jmx_ldap.config",
-      "puppet:///modules/mcwebapp/scripts/${::mc_grid}/jmx_ldap.config",
+      "${mcwebapp_env_path}/${::hostname}/jmx_ldap.config",
+      "${mcwebapp_env_path}/jmx_ldap.config",
       'puppet:///modules/mcwebapp/scripts/jmx_ldap.config'
     ],
     owner   => 'mcuser',
@@ -182,8 +195,8 @@ class adminconsole {
   file { '/usr/local/tomcat/cfg/jmxremote.access':
     ensure  => $jmx_ldap_ensure,
     source  => [
-      "puppet:///modules/mcwebapp/scripts/${::mc_grid}/${::hostname}/jmxremote.access",
-      "puppet:///modules/mcwebapp/scripts/${::mc_grid}/jmxremote.access",
+      "${mcwebapp_env_path}/${::hostname}/jmxremote.access",
+      "${mcwebapp_env_path}/jmxremote.access",
       'puppet:///modules/mcwebapp/scripts/jmxremote.access'
     ],
     owner   => 'mcuser',
@@ -195,8 +208,8 @@ class adminconsole {
   file { '/usr/local/tomcat/conf/server.xml':
     ensure  => present,
     source  => [
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/server.xml",
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/server.xml",
+      "${adminconsole_env_path}/${::hostname}/server.xml",
+      "${adminconsole_env_path}/server.xml",
       'puppet:///modules/adminconsole/scripts/server.xml',
     ],
     owner   => 'mcuser',
@@ -208,8 +221,8 @@ class adminconsole {
   file { '/usr/local/tomcat/cfg/localproperties.json':
     ensure  => present,
     source  => [
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/localproperties.json",
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/localproperties.json",
+      "${adminconsole_env_path}/${::hostname}/localproperties.json",
+      "${adminconsole_env_path}/localproperties.json",
       'puppet:///modules/adminconsole/scripts/localproperties.json'
     ],
     owner   => 'mcuser',
@@ -246,8 +259,8 @@ class adminconsole {
   file { '/etc/rc.d/init.d/tomcat-adminconsole':
     ensure  => present,
     source  => [
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/tomcat-adminconsole",
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/tomcat-adminconsole",
+      "${adminconsole_env_path}/${::hostname}/tomcat-adminconsole",
+      "${adminconsole_env_path}/tomcat-adminconsole",
       'puppet:///modules/adminconsole/scripts/tomcat-adminconsole'
     ],
     owner   => root,
@@ -260,8 +273,8 @@ class adminconsole {
   file { '/usr/local/tomcat/bin/setenv.sh':
     ensure => present,
     source => [
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/${::hostname}/setenv.sh",
-      "puppet:///modules/adminconsole/scripts/${::mc_grid}/setenv.sh",
+      "${adminconsole_env_path}/${::hostname}/setenv.sh",
+      "${adminconsole_env_path}/setenv.sh",
       'puppet:///modules/adminconsole/scripts/setenv.sh'
     ],
     owner   => 'mcuser',
