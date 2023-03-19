@@ -42,8 +42,8 @@ class mimecast_sea_star_server_toolkit::apps_config (
 
   $app_name = 'mimecast-sea-star-server-toolkit'
   $base_dir = "/usr/local/mimecast/${app_name}"
-  $portal_appid = hiera('mimecast_web_container::apps_config::portal_appid')
-  $portal_appkey = hiera('mimecast_web_container::apps_config::portal_appkey')
+  $portal_appid = lookup('mimecast_web_container::apps_config::portal_appid')
+  $portal_appkey = lookup('mimecast_web_container::apps_config::portal_appkey')
 
   $directories = [
     '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matpwp/config',

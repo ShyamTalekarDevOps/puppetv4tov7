@@ -10,7 +10,7 @@ class mimecast_sea_star_server_toolkit::config {
   }
 
   $certificate_lookup = regsubst("wildcard.${::domain}", '\.', '_', 'G')
-  $cert = hiera($certificate_lookup, {}, 'internal_certs')
+  $cert = lookup($certificate_lookup, {}, 'internal_certs')
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit':
     ensure => directory,
@@ -129,7 +129,7 @@ class mimecast_sea_star_server_toolkit::config {
   ## Jersey seastar gets both mimecast.com and mimecast-offshore.com.
   ## mc_publicdomain is mimecast-offshore in Jersey, so we need to explicitly give it mimecast.com here
   if ($::mc_grid == 'Jersey') {
-    $onshore_certificate = hiera(regsubst('wildcard.mimecast.com', '\.', '_', 'G'))
+    $onshore_certificate = lookup(regsubst('wildcard.mimecast.com', '\.', '_', 'G'))
     file { "${ssl_dir}/asterisk.mimecast.com.cert.pem":
       ensure  => present,
       content => $onshore_certificate['crt'],
@@ -152,7 +152,7 @@ class mimecast_sea_star_server_toolkit::config {
   }
   ## Non-Jersey hosts only need their own mc_publicdomain cert
   ## Here we do the mc_publicdomain cert for all other grids AND jersey
-  $publicdomain_certificate = hiera(regsubst("wildcard.${::mc_publicdomain}", '\.', '_', 'G'))
+  $publicdomain_certificate = lookup(regsubst("wildcard.${::mc_publicdomain}", '\.', '_', 'G'))
   file { "${ssl_dir}/asterisk.${::mc_publicdomain}.cert.pem":
     ensure  => present,
     owner   => mcuser,
@@ -393,14 +393,14 @@ class mimecast_sea_star_server_toolkit::config {
   }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/encryption.key':
-    content   => base64('decode', hiera('mimecast_web_container::config::encryption_key')),
+    content   => base64('decode', lookup('mimecast_web_container::config::encryption_key')),
     replace   => true,
     show_diff => false,
     require   => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit']
   }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/signing.key':
-    content   => base64('decode', hiera('mimecast_web_container::config::siging_key')),
+    content   => base64('decode', lookup('mimecast_web_container::config::siging_key')),
     replace   => true,
     show_diff => false,
     require   => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit']
@@ -415,9 +415,9 @@ class mimecast_sea_star_server_toolkit::config {
     log_age_to_remove       => ['+60'],
   }
 
-  $aws = hiera('xdk::aws')
-  $aws_seastar = hiera('xdk::aws_seastar')
-  $aws_cert = hiera('xdk::aws_cert')
+  $aws = lookup('xdk::aws')
+  $aws_seastar = lookup('xdk::aws_seastar')
+  $aws_cert = lookup('xdk::aws_cert')
 
   validate_hash($aws)
 

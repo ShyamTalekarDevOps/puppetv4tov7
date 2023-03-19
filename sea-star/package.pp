@@ -2,7 +2,7 @@
 class mimecast_sea_star_server_toolkit::package {
 
   # Install applications prior to the toolkit
-  package { 'mimecast-sea-star-server-toolkit': }
+  package { 'mimecast-sea-star-server-toolkit': } 
   -> package { 'mimecast-ttp-web-portal': }
   -> package { 'mimecast-swg-web-portal': }
 
