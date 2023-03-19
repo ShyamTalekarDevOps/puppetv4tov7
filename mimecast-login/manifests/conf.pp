@@ -1,25 +1,25 @@
 #
 class mimecast_login::conf (
-$keyfile       = downcase("wildcard.login-${::mc_grid}.key"),
-$pemfile       = downcase("wildcard.login-${::mc_grid}.pem"),
-$pki_dir       = '/etc/pki/reverse-proxy',
-$nginx_logdir  = '/usr/local/mimecast/nginx/logs',
-$nginx_confdir = hiera('nginx::conf_dir','/etc/nginx'),
-$nginx_service = hiera('nginx::service_name','nginx'),
-$publicdomain = "${::mc_publicdomain}",
+  $pki_dir       = '/etc/pki/reverse-proxy',
+  $nginx_logdir  = '/usr/local/mimecast/nginx/logs',
 ) {
+  $nginx_confdir = hiera('nginx::conf_dir','/etc/nginx')
+  $nginx_service = hiera('nginx::service_name','nginx')
+  $keyfile      = downcase("wildcard.login-${::mc_grid}.key")
+  $pemfile      = downcase("wildcard.login-${::mc_grid}.pem")
+  $publicdomain = "${::mc_publicdomain}"
 
 # SSL CERTIFICATE SECTION
   # *.domain.tld - mimecast.com in prod
   ## for grids where mc_publicdomain is all set up
-  $publicdomain_certificate = hiera(regsubst("wildcard.${::mc_publicdomain}", '\.', '_', 'G'))
+  $publicdomain_certificate = lookup(regsubst("wildcard.${::mc_publicdomain}", '\.', '_', 'G'))
   file { "/etc/pki/reverse-proxy/wildcard.${::mc_publicdomain}.pem":
     ensure  => present,
     owner   => root,
     group   => root,
     replace => true,
     mode    => '0400',
-    content => $publicdomain_certificate['crt']
+    content => $publicdomain_certificate['crt'],
   }
   file { "/etc/pki/reverse-proxy/wildcard.${::mc_publicdomain}.key":
     ensure  => present,
@@ -27,27 +27,26 @@ $publicdomain = "${::mc_publicdomain}",
     group   => root,
     replace => true,
     mode    => '0400',
-    content => $publicdomain_certificate['key']
+    content => $publicdomain_certificate['key'],
   }
   ## Jersey needs both mimecast.com (covered below) and mimecast-offshore.com (covered above) 
-  if $::mc_grid == 'Jersey'
-  {
-    $onshorecert = hiera('wildcard_mimecast_com')
+  if $::mc_grid == 'Jersey' {
+    $onshorecert = lookup('wildcard_mimecast_com')
     file { '/etc/pki/reverse-proxy/wildcard.mimecast.com.pem':
-        ensure  => present,
-        owner   => root,
-        group   => root,
-        replace => true,
-        mode    => '0400',
-        content => $onshorecert['crt'],
+      ensure  => present,
+      owner   => root,
+      group   => root,
+      replace => true,
+      mode    => '0400',
+      content => $onshorecert['crt'],
     }
     file { '/etc/pki/reverse-proxy/wildcard.mimecast.com.key':
-        ensure  => present,
-        owner   => root,
-        group   => root,
-        replace => true,
-        mode    => '0400',
-        content => $onshorecert['key'],
+      ensure  => present,
+      owner   => root,
+      group   => root,
+      replace => true,
+      mode    => '0400',
+      content => $onshorecert['key'],
     }
     include mimecast_login::branded
   }
@@ -56,28 +55,28 @@ $publicdomain = "${::mc_publicdomain}",
   ## 20210501 the login-us.mimecast.com certificate has a subjAltName 
   ## for mimecast-offshore.com login hosts. As such, we hard-code 'mimecast.com' instead of using mc_publicdomain
 
-  $hieracert = hiera(regsubst("wildcard.login.${::mc_publicdomain}", '\.', '_', 'G'))
+  $hieracert = lookup(regsubst("wildcard.login.${::mc_publicdomain}", '\.', '_', 'G'))
   $namecert = "wildcard.login.${::mc_publicdomain}"
   include mimecast_login::relayservice
 
   file { "${pki_dir}/${namecert}.key":
-        ensure  => present,
-        owner   => root,
-        group   => root,
-        replace => true,
-        mode    => '0400',
-        content => $hieracert['key'],
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    replace => true,
+    mode    => '0400',
+    content => $hieracert['key'],
   }
   file { "${pki_dir}/${namecert}.pem":
-        ensure  => present,
-        owner   => root,
-        group   => root,
-        replace => true,
-        mode    => '0444',
-        content => $hieracert['crt'],
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    replace => true,
+    mode    => '0444',
+    content => $hieracert['crt'],
   }
   file { '/etc/pki/reverse-proxy/dhparam4096.pem':
-    ensure  => present,
+    ensure  => file,
     source  => 'puppet:///modules/mimecast_login/ssl/dhparam4096.pem',
     replace => true,
     mode    => '0644',
@@ -90,16 +89,15 @@ $publicdomain = "${::mc_publicdomain}",
 
   if $::mc_alpha == 'true' or $::mc_alpha == true {
     file { "${nginx_confdir}/conf.d/reverse_proxy.conf":
-      ensure  => present,
+      ensure  => file,
       content => template('mimecast_login/nginx/reverse_proxy.alpha.erb'),
       replace => true,
       notify  => Exec['refresh_nginx'],
     }
   }
-  else
-  {
+  else {
     file { "${nginx_confdir}/conf.d/reverse_proxy.conf":
-      ensure  => present,
+      ensure  => file,
       content => template("mimecast_login/nginx/reverse_proxy.${::mc_grid}.erb"),
       replace => true,
       notify  => Exec['refresh_nginx'],
@@ -111,8 +109,7 @@ $publicdomain = "${::mc_publicdomain}",
   }
   #END NGINX CONF
   # MISC
-  if $::mc_grid =~ /^(DEV|QA)$/
-  {
+  if $::mc_grid =~ /^(DEV|QA)$/ {
     class { '::mimecast_login::docroot':
       base_dir   => '/www',
       vhost_fqdn => 'mta-sts.mimecast.com',
@@ -132,7 +129,7 @@ $publicdomain = "${::mc_publicdomain}",
       group  => 'nginx',
     }
     file { '/www/mta-sts.mimecast.com/htdocs/.well-known/mta-sts.txt':
-      ensure => present,
+      ensure => file,
       source => 'puppet:///modules/mimecast_login/mta-sts.txt',
       mode   => '0644',
       owner  => 'nginx',

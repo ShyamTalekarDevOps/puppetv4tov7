@@ -24,52 +24,52 @@ class mimecast_sea_star_server_toolkit::config {
   }
 
   file { [
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/TTPWP',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/TTPWP/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/apps',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/apps/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/branding',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/case-review',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/case-review/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/common',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/common/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/connect',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/connect/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe-access',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe-access/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mateup',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mateup/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mimecast-bi-web-portal',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mimecast-bi-web-portal/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/supervision',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/supervision/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/threat-dashboard',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/threat-dashboard/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/sync-recover',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/sync-recover/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/onboarding',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/onboarding/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/portal',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/portal/config',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/log',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/resources'
-  ]:
-    ensure => directory,
-    owner  => mcuser,
-    group  => mcuser,
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/TTPWP',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/TTPWP/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/apps',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/apps/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/branding',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/case-review',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/case-review/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/common',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/common/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/connect',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/connect/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe-access',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe-access/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mateup',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mateup/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mimecast-bi-web-portal',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mimecast-bi-web-portal/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/supervision',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/supervision/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/threat-dashboard',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/threat-dashboard/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/sync-recover',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/sync-recover/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/onboarding',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/onboarding/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/portal',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/portal/config',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/log',
+      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/resources'
+    ]:
+      ensure => directory,
+      owner  => mcuser,
+      group  => mcuser,
   }
 
   if $::fqdn == 'dev-sl-5.dev.mimecast.lan' {
@@ -88,7 +88,7 @@ class mimecast_sea_star_server_toolkit::config {
   }
   else {
     file { "/etc/systemd/system/${app_name}.service":
-      ensure  => present,
+      ensure  => file,
       content => template("mimecast_sea_star_server_toolkit/${template_name}.service.erb"),
       owner   => root,
       group   => root,
@@ -96,7 +96,7 @@ class mimecast_sea_star_server_toolkit::config {
       notify  => Exec["${app_name}_reload_systemd"],
       before  => Service[$app_name],
     }
-    file { [ '/usr/local/mimecast/mimecast-sea-star-server-toolkit/bin' ]:
+    file { ['/usr/local/mimecast/mimecast-sea-star-server-toolkit/bin']:
       ensure => directory,
       owner  => root,
       group  => root,
@@ -114,9 +114,7 @@ class mimecast_sea_star_server_toolkit::config {
     owner  => $owner,
     group  => $owner,
     mode   => '0755',
-    source => [
-      'puppet:///modules/mimecast_sea_star_server_toolkit/mimecast-sea-star-server-toolkit'
-    ]
+    source => ['puppet:///modules/mimecast_sea_star_server_toolkit/mimecast-sea-star-server-toolkit'],
   }
 
   $ssl_dir = '/usr/local/mimecast/mimecast-sea-star-server-toolkit/ssl'
@@ -131,7 +129,7 @@ class mimecast_sea_star_server_toolkit::config {
   if ($::mc_grid == 'Jersey') {
     $onshore_certificate = lookup(regsubst('wildcard.mimecast.com', '\.', '_', 'G'))
     file { "${ssl_dir}/asterisk.mimecast.com.cert.pem":
-      ensure  => present,
+      ensure  => file,
       content => $onshore_certificate['crt'],
       owner   => mcuser,
       group   => root,
@@ -141,7 +139,7 @@ class mimecast_sea_star_server_toolkit::config {
     }
 
     file { "${ssl_dir}/asterisk.mimecast.com.key.pem":
-      ensure  => present,
+      ensure  => file,
       content => $onshore_certificate['key'],
       owner   => mcuser,
       group   => root,
@@ -154,7 +152,7 @@ class mimecast_sea_star_server_toolkit::config {
   ## Here we do the mc_publicdomain cert for all other grids AND jersey
   $publicdomain_certificate = lookup(regsubst("wildcard.${::mc_publicdomain}", '\.', '_', 'G'))
   file { "${ssl_dir}/asterisk.${::mc_publicdomain}.cert.pem":
-    ensure  => present,
+    ensure  => file,
     owner   => mcuser,
     group   => root,
     replace => true,
@@ -164,7 +162,7 @@ class mimecast_sea_star_server_toolkit::config {
     notify  => Service['mimecast-sea-star-server-toolkit'],
   }
   file { "${ssl_dir}/asterisk.${::mc_publicdomain}.key.pem":
-    ensure  => present,
+    ensure  => file,
     owner   => mcuser,
     group   => root,
     replace => true,
@@ -189,7 +187,7 @@ class mimecast_sea_star_server_toolkit::config {
     }
     # Dummy offshore cert for pre-prod
     file { "${ssl_dir}/dev.mimecast-offshore.com.cert.crt":
-      ensure  => present,
+      ensure  => file,
       source  => 'puppet:///modules/mimecast_sea_star_server_toolkit/ssl/dev.mimecast-offshore.com.cert.crt',
       owner   => 'mcuser',
       group   => 'mcuser',
@@ -198,7 +196,7 @@ class mimecast_sea_star_server_toolkit::config {
       notify  => Service['mimecast-sea-star-server-toolkit'],
     }
     file { "${ssl_dir}/dev.mimecast-offshore.com.key.pem":
-      ensure  => present,
+      ensure  => file,
       source  => 'puppet:///modules/mimecast_sea_star_server_toolkit/ssl/dev.mimecast-offshore.com.key.pem',
       owner   => 'mcuser',
       group   => 'mcuser',
@@ -251,7 +249,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/administration/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/administration/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/administration/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -286,7 +283,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/case-review/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/case-review/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/case-review/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -304,7 +300,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/ingestion-management/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/ingestion-management/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/ingestion-management/caps-override.json',
-
     ],
     require => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management/config'],
     owner   => 'mcuser',
@@ -321,7 +316,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/connect/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/connect/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/connect/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -339,7 +333,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/supervision/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/supervision/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/supervision/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -374,7 +367,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/apps/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/apps/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/apps/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -384,7 +376,7 @@ class mimecast_sea_star_server_toolkit::config {
 
   if ($::mc_grid !~ /DEV|QA|LT/) {
     file { '/etc/sysconfig/mimecast-sea-star-server-toolkit':
-      ensure => 'present',
+      ensure => file,
       owner  => root,
       group  => root,
       mode   => '0644',
@@ -396,14 +388,14 @@ class mimecast_sea_star_server_toolkit::config {
     content   => base64('decode', lookup('mimecast_web_container::config::encryption_key')),
     replace   => true,
     show_diff => false,
-    require   => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit']
+    require   => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
   }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/signing.key':
     content   => base64('decode', lookup('mimecast_web_container::config::siging_key')),
     replace   => true,
     show_diff => false,
-    require   => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit']
+    require   => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
   }
 
   logrotation::worker { 'mimecast-sea-star-server-toolkit-logs':
@@ -422,16 +414,16 @@ class mimecast_sea_star_server_toolkit::config {
   validate_hash($aws)
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg/aws_config.json':
-    ensure  => present,
+    ensure  => file,
     content => template("${module_name}/aws_config.json.erb"),
     owner   => mcuser,
     group   => mcuser,
     mode    => '0640',
-    require => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg']
+    require => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg'],
   }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg/aws_cert.pem':
-    ensure  => present,
+    ensure  => file,
     content => template("${module_name}/aws_cert.pem.erb"),
     owner   => mcuser,
     group   => mcuser,
@@ -483,7 +475,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/matfe/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/matfe/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/matfe/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -501,7 +492,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/common/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/common/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/common/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -519,7 +509,6 @@ class mimecast_sea_star_server_toolkit::config {
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/sync-recover/${::mc_grid}/caps-override.json",
       "puppet:///modules/mimecast_sea_star_server_toolkit/caps/sync-recover/${::mc_servertype}/caps-override.json",
       'puppet:///modules/mimecast_sea_star_server_toolkit/caps/sync-recover/caps-override.json',
-
     ],
     owner        => 'mcuser',
     group        => 'mcuser',
@@ -530,12 +519,12 @@ class mimecast_sea_star_server_toolkit::config {
   # caps for testing cloud protect
   if( $::mc_grid =~ /^(DEV)$/ ) {
     file { [
-      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/cloud-protect-dashboard',
-      '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/cloud-protect-dashboard/config'
-    ]:
-      ensure => directory,
-      owner  => mcuser,
-      group  => mcuser,
+        '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/cloud-protect-dashboard',
+        '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/cloud-protect-dashboard/config'
+      ]:
+        ensure => directory,
+        owner  => mcuser,
+        group  => mcuser,
     }
     file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/cloud-protect-dashboard/config/caps-override.json':
       source       => [
@@ -547,7 +536,6 @@ class mimecast_sea_star_server_toolkit::config {
         "puppet:///modules/mimecast_sea_star_server_toolkit/caps/cloud-protect-dashboard/${::mc_grid}/caps-override.json",
         "puppet:///modules/mimecast_sea_star_server_toolkit/caps/cloud-protect-dashboard/${::mc_servertype}/caps-override.json",
         'puppet:///modules/mimecast_sea_star_server_toolkit/caps/cloud-protect-dashboard/caps-override.json',
-
       ],
       owner        => 'mcuser',
       group        => 'mcuser',

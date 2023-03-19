@@ -1,6 +1,4 @@
 #
-class mimecast_app_launcher::config(
+class mimecast_app_launcher::config (
 ) {
-
 }
-

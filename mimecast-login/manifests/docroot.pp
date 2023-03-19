@@ -1,4 +1,8 @@
-class mimecast_login::docroot($base_dir,$vhost_fqdn,$htdocs) {
+#
+class mimecast_login::docroot (
+  $base_dir,
+  $vhost_fqdn,
+  $htdocs) {
   file { $base_dir:
     ensure => directory,
     mode   => '0755',

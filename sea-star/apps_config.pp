@@ -39,7 +39,6 @@ class mimecast_sea_star_server_toolkit::apps_config (
   $syncrecover_appid = '',
   $syncrecover_appkey = ''
 ) {
-
   $app_name = 'mimecast-sea-star-server-toolkit'
   $base_dir = "/usr/local/mimecast/${app_name}"
   $portal_appid = lookup('mimecast_web_container::apps_config::portal_appid')
@@ -50,7 +49,7 @@ class mimecast_sea_star_server_toolkit::apps_config (
     '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config',
     '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP/config',
     '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration',
-    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration/config'
+    '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration/config',
   ]
 
   File {
@@ -60,98 +59,97 @@ class mimecast_sea_star_server_toolkit::apps_config (
     mode   => '0644',
   }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json':
-      ensure => file,
-      source => 'puppet:///modules/mimecast_sea_star_server_toolkit/resources/app.config.schema.json',
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json':
+    ensure => file,
+    source => 'puppet:///modules/mimecast_sea_star_server_toolkit/resources/app.config.schema.json',
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg/cfg.json':
-      content => template('mimecast_sea_star_server_toolkit/cfg.json.erb'),
-      replace => true,
-      require => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/cfg/cfg.json':
+    content => template('mimecast_sea_star_server_toolkit/cfg.json.erb'),
+    replace => true,
+    require => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/apps/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/apps.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/apps/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/apps.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/threat-dashboard/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/threat-dashboard.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/threat-dashboard/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/threat-dashboard.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/ingestion-management.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/ingestion-management/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/ingestion-management.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/case-review/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/case-review.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/case-review/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/case-review.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/matfe.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/matfe.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe-access/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/matfe-access.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matfe-access/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/matfe-access.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/TTPWP/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/mimecast-ttp-web-portal.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/TTPWP/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/mimecast-ttp-web-portal.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mimecast-bi-web-portal/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/bi-web-portal.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/mimecast-bi-web-portal/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/bi-web-portal.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
-
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matpwp/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/matpwp.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/matpwp/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/matpwp.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
   # Apps that need to be tested on DEV and QA for key rotation
   if ($::mc_grid =~ /^(DEV|QA)$/) {
@@ -195,23 +193,23 @@ class mimecast_sea_star_server_toolkit::apps_config (
     notify       => Service['mimecast-sea-star-server-toolkit'],
   }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/moa.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/moa.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa/config'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
-    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP/config/cfg.json':
-      ensure       => file,
-      content      => template('mimecast_sea_star_server_toolkit/swg-web-portal.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-      notify       => Service['mimecast-sea-star-server-toolkit'],
-    }
+  file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/SWGWP/config/cfg.json':
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/swg-web-portal.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
+  }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/connect/config/cfg.json':
     ensure       => file,
@@ -222,16 +220,16 @@ class mimecast_sea_star_server_toolkit::apps_config (
     #notify => Service['mimecast-sea-star-server-toolkit'],
   }
 
-    if ($::mc_grid =~ /^(DEV|DEVRH|QA)$/) {
-      file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa-sm/config/cfg.json':
-        ensure       => file,
-        content      => template('mimecast_sea_star_server_toolkit/moa-sm.app.json.erb'),
-        validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-        replace      => true,
-        require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-        notify       => Service['mimecast-sea-star-server-toolkit'],
-      }  
+  if ($::mc_grid =~ /^(DEV|DEVRH|QA)$/) {
+    file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/moa-sm/config/cfg.json':
+      ensure       => file,
+      content      => template('mimecast_sea_star_server_toolkit/moa-sm.app.json.erb'),
+      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
+      replace      => true,
+      require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+      notify       => Service['mimecast-sea-star-server-toolkit'],
     }
+  }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/administration/config/cfg.json':
     ensure       => file,
@@ -251,12 +249,11 @@ class mimecast_sea_star_server_toolkit::apps_config (
   }
 
   file { '/usr/local/mimecast/mimecast-sea-star-server-toolkit/dist/web-apps/supervision/config/cfg.json':
-    ensure  => file,
-    content => template('mimecast_sea_star_server_toolkit/supervision.app.json.erb'),
+    ensure       => file,
+    content      => template('mimecast_sea_star_server_toolkit/supervision.app.json.erb'),
     validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-sea-star-server-toolkit/resources/app.config.schema.json',
-    replace => true,
-    require => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
-    notify => Service['mimecast-sea-star-server-toolkit'],
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-sea-star-server-toolkit'],
+    notify       => Service['mimecast-sea-star-server-toolkit'],
   }
 }
-

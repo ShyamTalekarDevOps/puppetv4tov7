@@ -1,8 +1,7 @@
 #
-class mimecast_sea_star_server_toolkit::service(
+class mimecast_sea_star_server_toolkit::service (
   $ensure = 'running',
 ) {
-
   service { 'mimecast-sea-star-server-toolkit':
     ensure     => $ensure,
     hasstatus  => true,
@@ -18,5 +17,4 @@ class mimecast_sea_star_server_toolkit::service(
     command => '/sbin/service mimecast-sea-star-server-toolkit restart',
     onlyif  => '/bin/echo "/sbin/service mimecast-sea-star-server-toolkit status &>/dev/null && ls /usr/bin/node &>/dev/null && lsof -p $(cat /var/run/mimecast-sea-star-server-toolkit.pid) | grep -q \'node (deleted)\'" | /bin/bash',
   }
-
 }
