@@ -1,6 +1,5 @@
 #
 class mimecast_web_container::kafka_config {
-
   # Overriding the lookup by mc_grid in hiera to force US in our SWGPOP environment
   # TODO: we should reorganise the keys in hiera to be able to avoid this workaround
   if ( $::mc_swgpop == 'true' and $::mc_grid =~ /^(USC|USW)$/ ) {
@@ -21,5 +20,4 @@ class mimecast_web_container::kafka_config {
     group   => $app_group,
     mode    => '0644',
   }
-
 }

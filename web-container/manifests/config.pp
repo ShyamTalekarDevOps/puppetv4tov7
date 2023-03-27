@@ -16,7 +16,7 @@ class mimecast_web_container::config (
     '/usr/local/mimecast/mimecast-web-container/cfg',
     '/usr/local/mimecast/mimecast-web-container/tmp/mc-uploaded-files',
     '/usr/local/mimecast/mimecast-web-container/resources',
-    '/usr/local/mimecast/mimecast-web-container/config'
+    '/usr/local/mimecast/mimecast-web-container/config',
   ]
 
   if $::mc_servertype == 'adcon' {
@@ -28,28 +28,27 @@ class mimecast_web_container::config (
       $turbo_encryption_signed_key_base64 = $turbo_keys['turbo_encryption_signed_key_base64']
 
       file { "${base_dir}/cfg/api-turbo.json":
-        ensure  => 'present',
+        ensure  => file,
         owner   => 'mcuser',
         group   => 'mcuser',
         content => template('mimecast_web_container/api-turbo.json.erb'),
         replace => true,
-        mode    => '0600'
+        mode    => '0600',
       }
     }
   }
 
   if $::mc_grid == 'DEV' {
-    file { "/usr/local/mimecast/secret":
+    file { '/usr/local/mimecast/secret':
       ensure => directory,
       mode   => '0755',
     }
 
-    file { "/usr/local/mimecast/secret/credentials.json":
+    file { '/usr/local/mimecast/secret/credentials.json':
       content => inline_template('<%= JSON.pretty_generate(@mimeos_credentials) %>'),
-      mode    => '0655'
+      mode    => '0655',
     }
   }
-
 
   File {
     ensure => file,
@@ -87,9 +86,8 @@ class mimecast_web_container::config (
     content   => base64('decode', $encryption_key),
     replace   => true,
     show_diff => false,
-    require   => File['/usr/local/mimecast/mimecast-web-container']
+    require   => File['/usr/local/mimecast/mimecast-web-container'],
   }
-
 
   file { '/usr/local/mimecast/mimecast-web-container/siging.key':
     content   => base64('decode', $siging_key),
@@ -103,7 +101,6 @@ class mimecast_web_container::config (
     replace => true,
     require => File['/usr/local/mimecast/mimecast-web-container'],
   }
-
 
   file { '/usr/local/mimecast/mimecast-web-container/private.key':
     source  => 'puppet:///modules/mimecast_web_container/scripts/private.key',
@@ -120,13 +117,32 @@ class mimecast_web_container::config (
     content      => template('mimecast_web_container/config.json.erb'),
     validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/config/config.schema.json',
     replace      => true,
-    require      => File['/usr/local/mimecast/mimecast-web-container/config/config.schema.json']
+    require      => File['/usr/local/mimecast/mimecast-web-container/config/config.schema.json'],
   }
 
   $serverjson_source = $::mc_servertype ? {
     'webservice' => 'webservice-server.json.erb',
     'webservice-alpha' => 'webservice-server.json.erb',
     default      => 'adcon-server.json.erb',
+  }
+
+  $webcontainer_env_path = $::mc_grid ? {
+    'DEV'    => 'puppet:///modules/mimecast_web_container/scripts/DEV',
+    'QA'     => 'puppet:///modules/mimecast_web_container/scripts/QA',
+    'LT'     => 'puppet:///modules/mimecast_web_container/scripts/LT',
+    'SND'    => 'puppet:///modules/mimecast_web_container/scripts/SND',
+    'STG'    => 'puppet:///modules/mimecast_web_container/scripts/STG',
+    'DE'     => 'puppet:///modules/mimecast_web_container/scripts/DE',
+    'ZA'     => 'puppet:///modules/mimecast_web_container/scripts/ZA',
+    'UK'     => 'puppet:///modules/mimecast_web_container/scripts/UK',
+    'Jersey' => 'puppet:///modules/mimecast_web_container/scripts/Jersey',
+    'CA'     => 'puppet:///modules/mimecast_web_container/scripts/CA',
+    'US'     => 'puppet:///modules/mimecast_web_container/scripts/US',
+    'USB'    => 'puppet:///modules/mimecast_web_container/scripts/USB',
+    'USPGOV' => 'puppet:///modules/mimecast_web_container/scripts/USPGOV',
+    'USPCOM' => 'puppet:///modules/mimecast_web_container/scripts/USPCOM',
+    'AU'     => 'puppet:///modules/mimecast_web_container/scripts/AU',
+    default  => absent
   }
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/server.json':
@@ -137,14 +153,14 @@ class mimecast_web_container::config (
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/localproperties.json':
     source       => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/localproperties.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/localproperties.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/localproperties.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/localproperties.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/localproperties.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/localproperties.json",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/localproperties.json",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/localproperties.json",
+      "${webcontainer_env_path}/${::domain}/localproperties.json",
+      "${webcontainer_env_path}/${::hostname}/localproperties.json",
+      "${webcontainer_env_path}/${::mc_servertype}/localproperties.json",
+      "${webcontainer_env_path}/localproperties.json",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/localproperties.json",
-      'puppet:///modules/mimecast_web_container/scripts/localproperties.json'
+      'puppet:///modules/mimecast_web_container/scripts/localproperties.json',
     ],
     validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/resources/localproperties.schema.json',
     replace      => true,
@@ -153,46 +169,44 @@ class mimecast_web_container::config (
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/log4j.xml':
     source  => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/log4j.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/log4j.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/log4j.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/log4j.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/log4j.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/log4j.xml",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/log4j.xml",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/log4j.xml",
+      "${webcontainer_env_path}/${::domain}/log4j.xml",
+      "${webcontainer_env_path}/${::hostname}/log4j.xml",
+      "${webcontainer_env_path}/${::mc_servertype}/log4j.xml",
+      "${webcontainer_env_path}/log4j.xml",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/log4j.xml",
-      'puppet:///modules/mimecast_web_container/scripts/log4j.xml'
+      'puppet:///modules/mimecast_web_container/scripts/log4j.xml',
     ],
     replace => true,
     require => File['/usr/local/mimecast/mimecast-web-container'],
   }
-
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/log4j2.xml':
     source  => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/log4j2.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/log4j2.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/log4j2.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/log4j2.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/log4j2.xml",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/log4j2.xml",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/log4j2.xml",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/log4j2.xml",
+      "${webcontainer_env_path}/${::domain}/log4j2.xml",
+      "${webcontainer_env_path}/${::hostname}/log4j2.xml",
+      "${webcontainer_env_path}/${::mc_servertype}/log4j2.xml",
+      "${webcontainer_env_path}/log4j2.xml",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/log4j2.xml",
-      'puppet:///modules/mimecast_web_container/scripts/log4j2.xml'
+      'puppet:///modules/mimecast_web_container/scripts/log4j2.xml',
     ],
     replace => true,
     require => File['/usr/local/mimecast/mimecast-web-container'],
   }
 
-
   file { '/usr/local/mimecast/mimecast-web-container/cfg/mimecast-admin-console.caps.json':
     source       => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/mimecast-admin-console.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/mimecast-admin-console.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/mimecast-admin-console.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/mimecast-admin-console.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/mimecast-admin-console.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/mimecast-admin-console.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/mimecast-admin-console.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/mimecast-admin-console.caps.json",
+      "${webcontainer_env_path}/${::domain}/mimecast-admin-console.caps.json",
+      "${webcontainer_env_path}/${::hostname}/mimecast-admin-console.caps.json",
+      "${webcontainer_env_path}/${::mc_servertype}/mimecast-admin-console.caps.json",
+      "${webcontainer_env_path}/mimecast-admin-console.caps.json",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/mimecast-admin-console.caps.json",
-      'puppet:///modules/mimecast_web_container/scripts/mimecast-admin-console.caps.json'
+      'puppet:///modules/mimecast_web_container/scripts/mimecast-admin-console.caps.json',
     ],
     validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/resources/admin-console.caps.schema.json',
     replace      => true,
@@ -202,14 +216,14 @@ class mimecast_web_container::config (
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/mimecast-portal.caps.json':
     source       => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/mimecast-portal.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/mimecast-portal.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/mimecast-portal.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/mimecast-portal.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/mimecast-portal.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/mimecast-portal.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/mimecast-portal.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/mimecast-portal.caps.json",
+      "${webcontainer_env_path}/${::domain}/mimecast-portal.caps.json",
+      "${webcontainer_env_path}/${::hostname}/mimecast-portal.caps.json",
+      "${webcontainer_env_path}/${::mc_servertype}/mimecast-portal.caps.json",
+      "${webcontainer_env_path}/mimecast-portal.caps.json",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/mimecast-portal.caps.json",
-      'puppet:///modules/mimecast_web_container/scripts/mimecast-portal.caps.json'
+      'puppet:///modules/mimecast_web_container/scripts/mimecast-portal.caps.json',
     ],
     replace      => true,
     require      => File['/usr/local/mimecast/mimecast-web-container/resources/caps.schema.json'],
@@ -218,14 +232,14 @@ class mimecast_web_container::config (
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/mimecast-reviewer.caps.json':
     source       => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/mimecast-reviewer.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/mimecast-reviewer.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/mimecast-reviewer.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/mimecast-reviewer.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/mimecast-reviewer.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/mimecast-reviewer.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/mimecast-reviewer.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/mimecast-reviewer.caps.json",
+      "${webcontainer_env_path}/${::domain}/mimecast-reviewer.caps.json",
+      "${webcontainer_env_path}/${::hostname}/mimecast-reviewer.caps.json",
+      "${webcontainer_env_path}/${::mc_servertype}/mimecast-reviewer.caps.json",
+      "${webcontainer_env_path}/mimecast-reviewer.caps.json",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/mimecast-reviewer.caps.json",
-      'puppet:///modules/mimecast_web_container/scripts/mimecast-reviewer.caps.json'
+      'puppet:///modules/mimecast_web_container/scripts/mimecast-reviewer.caps.json',
     ],
     validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/resources/caps.schema.json',
     require      => File['/usr/local/mimecast/mimecast-web-container/resources/caps.schema.json'],
@@ -233,12 +247,12 @@ class mimecast_web_container::config (
 
   file { '/usr/local/mimecast/mimecast-web-container/cfg/mimecast-supervision.caps.json':
     source       => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/mimecast-supervision.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/mimecast-supervision.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/mimecast-supervision.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/mimecast-supervision.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/mimecast-supervision.caps.json",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/mimecast-supervision.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/mimecast-supervision.caps.json",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/mimecast-supervision.caps.json",
+      "${webcontainer_env_path}/${::domain}/mimecast-supervision.caps.json",
+      "${webcontainer_env_path}/${::hostname}/mimecast-supervision.caps.json",
+      "${webcontainer_env_path}/${::mc_servertype}/mimecast-supervision.caps.json",
+      "${webcontainer_env_path}/mimecast-supervision.caps.json",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/mimecast-supervision.caps.json",
       'puppet:///modules/mimecast_web_container/scripts/mimecast-supervision.caps.json'
     ],
@@ -246,14 +260,13 @@ class mimecast_web_container::config (
     require      => File['/usr/local/mimecast/mimecast-web-container/resources/caps.schema.json'],
   }
 
-
   if $::operatingsystemmajrelease == '6' {
     $init_script = '/etc/init.d/mimecast-web-container'
     $owner = 'root'
   }
   else {
     file { '/etc/systemd/system/mimecast-web-container.service':
-      ensure  => present,
+      ensure  => file,
       content => template('mimecast_web_container/mimecast-web-container.service.erb'),
       owner   => root,
       group   => root,
@@ -276,25 +289,25 @@ class mimecast_web_container::config (
     group  => $owner,
     mode   => '0755',
     source => [
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::hostname}/mimecast-web-container",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/${::mc_servertype}/mimecast-web-container",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::domain}/mimecast-web-container",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::hostname}/mimecast-web-container",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/${::mc_servertype}/mimecast-web-container",
-      "puppet:///modules/mimecast_web_container/scripts/${::mc_grid}/mimecast-web-container",
+      "${webcontainer_env_path}/${::domain}/${::hostname}/mimecast-web-container",
+      "${webcontainer_env_path}/${::domain}/${::mc_servertype}/mimecast-web-container",
+      "${webcontainer_env_path}/${::domain}/mimecast-web-container",
+      "${webcontainer_env_path}/${::hostname}/mimecast-web-container",
+      "${webcontainer_env_path}/${::mc_servertype}/mimecast-web-container",
+      "${webcontainer_env_path}/mimecast-web-container",
       "puppet:///modules/mimecast_web_container/scripts/${::mc_servertype}/mimecast-web-container",
-      'puppet:///modules/mimecast_web_container/scripts/mimecast-web-container'
-    ]
+      'puppet:///modules/mimecast_web_container/scripts/mimecast-web-container',
+    ],
   }
 
-    file { "/usr/local/mimecast/mimecast-web-container/cfg/mimecast-admin-console.app.json":
-      ensure       => file,
-      content      => template('mimecast_web_container/mimecast-admin-console.app.json.erb'),
-      validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/resources/mimecast-web-container.app.schema.json',
-      replace      => true,
-      require      => File['/usr/local/mimecast/mimecast-web-container'],
-      notify       => Service['mimecast-web-container'],
-    }
+  file { '/usr/local/mimecast/mimecast-web-container/cfg/mimecast-admin-console.app.json':
+    ensure       => file,
+    content      => template('mimecast_web_container/mimecast-admin-console.app.json.erb'),
+    validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/resources/mimecast-web-container.app.schema.json',
+    replace      => true,
+    require      => File['/usr/local/mimecast/mimecast-web-container'],
+    notify       => Service['mimecast-web-container'],
+  }
 
   logrotation::worker { 'mimecast-web-container-logs':
     service                 => ['mimecast-web-container-log'],
@@ -308,7 +321,6 @@ class mimecast_web_container::config (
   $mcms_user = hiera('postgres_users')
 
   if $::mc_servertype == 'adcon' {
-
     file { '/usr/local/mimecast/mimecast-web-container/debug':
       ensure => directory,
     }
@@ -318,8 +330,6 @@ class mimecast_web_container::config (
       replace => true,
       require => File['/usr/local/mimecast/mimecast-web-container'],
     }
-
-
     if $::mc_publicsector == 'false' or $::mc_publicsector == false {
       #--------------- Browser Isolation client cert -------------------
       $adcon_biclient_cert_name    = 'adcon_biclient_cert'
@@ -353,8 +363,8 @@ class mimecast_web_container::config (
         mode  => '0400'
       }
 
-      file { "/usr/local/mimecast/mimecast-web-container/cfg/.adcon_biclient_cert_password":
-        ensure  => 'present',
+      file { '/usr/local/mimecast/mimecast-web-container/cfg/.adcon_biclient_cert_password':
+        ensure  => file,
         content => inline_template('<%= @adcon_biclient_cert_keystore_password %>'),
         owner   => 'root',
         group   => 'mcapp',
@@ -366,12 +376,12 @@ class mimecast_web_container::config (
 
   if ($::mc_grid =~ /^(DEV|QA|SND|STG|LT|DE|ZA|UK|Jersey|CA|US|USB|USPGOV|USPCOM|AU)$/ or $::mc_alpha == 'true') {
     file { [
-      '/usr/local/mimecast/mimecast-web-container/cfg/static',
-      '/usr/local/mimecast/mimecast-web-container/tmp/event-streaming-service',
-      '/usr/local/mimecast/mimecast-web-container/resources/event-streaming-service'
-    ]:
-      ensure => directory,
-      mode   => '0755'
+        '/usr/local/mimecast/mimecast-web-container/cfg/static',
+        '/usr/local/mimecast/mimecast-web-container/tmp/event-streaming-service',
+        '/usr/local/mimecast/mimecast-web-container/resources/event-streaming-service',
+      ]:
+        ensure => directory,
+        mode   => '0755',
     }
 
     file { '/usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/product-definition.schema.json':
@@ -387,28 +397,28 @@ class mimecast_web_container::config (
     }
 
     file { '/usr/local/mimecast/mimecast-web-container/cfg/static/event-streaming-service':
-      ensure  => directory,
-      source  => ["puppet:///modules/mimecast_web_container/static/event-streaming-service"],
-      recurse => true,
-      purge   => true,
+      ensure       => directory,
+      source       => ['puppet:///modules/mimecast_web_container/static/event-streaming-service'],
+      recurse      => true,
+      purge        => true,
       validate_cmd => '/usr/bin/python3 -m jsonschema -i % /usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/product-definition.schema.json',
       require      => File['/usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/product-definition.schema.json'],
-      notify       => Exec['merge_product_definition']
+      notify       => Exec['merge_product_definition'],
     }
 
     exec { 'merge_product_definition':
       refreshonly => true,
-      cwd         => "/usr/local/mimecast/mimecast-web-container/cfg/static/event-streaming-service",
+      cwd         => '/usr/local/mimecast/mimecast-web-container/cfg/static/event-streaming-service',
       provider    => shell,
-      command     => "/usr/bin/ruby /usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/merge_product_definition.rb",
-      notify      => Exec['validate_copy_products_definition']
+      command     => '/usr/bin/ruby /usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/merge_product_definition.rb',
+      notify      => Exec['validate_copy_products_definition'],
     }
 
     exec { 'validate_copy_products_definition':
       refreshonly => true,
-      cwd         => "/usr/local/mimecast/mimecast-web-container/tmp/event-streaming-service",
+      cwd         => '/usr/local/mimecast/mimecast-web-container/tmp/event-streaming-service',
       provider    => shell,
-      command     => "/usr/bin/python3 -m jsonschema -i ./products_definition.json   /usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/products-definition.schema.json && cp products_definition.json /usr/local/mimecast/mimecast-web-container/cfg/static"
+      command     => '/usr/bin/python3 -m jsonschema -i ./products_definition.json   /usr/local/mimecast/mimecast-web-container/resources/event-streaming-service/products-definition.schema.json && cp products_definition.json /usr/local/mimecast/mimecast-web-container/cfg/static'
     }
   }
 }
